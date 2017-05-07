@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            name="TIBCO iProcess Decisions"
+            id="com.tibco.bestudio.ui.import.iprocessdecisions.category">
+      </category>
+      <wizard
+            name="Import Vocabulary"
+            icon="icons/iProcessDecisions.gif"
+            category="com.tibco.bestudio.ui.import.iprocessdecisions.category"
+            class="com.tibco.bestudio.ui.importWizards.ImportiProcessDecisionsVocabularyWizard"
+            id="com.tibco.bestudio.ui.importWizards.ImportiProcessDecisionsVocabularyWizard">
+         <description>
+            Import a vocabulary file and convert it to TIBCO BusinessEvents Concepts.
+         </description>
+      </wizard>
+   </extension>
+
+</plugin>
