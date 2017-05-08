@@ -27,7 +27,7 @@ public class Vocabulary implements Comparable<Vocabulary>{
 	
 	public Vocabulary(String name) {
 		this.name = name;
-		this.guid = UUID.randomUUID().toString();
+		this.guid = UUID.randomUUID().toString().toUpperCase();
 		initialiseAttributes();
 		initialiseAssociations();
 	}
@@ -119,13 +119,15 @@ public class Vocabulary implements Comparable<Vocabulary>{
 				//Create the domain model file
 				Domain domain = DomainFactory.eINSTANCE.createDomain();
 				domain.setName(modelName);
-				domain.setGUID(UUID.randomUUID().toString());
+				domain.setGUID(UUID.randomUUID().toString().toUpperCase());
+				domain.setNamespace("/Concepts/");
+				domain.setFolder("/Concepts/");
 				DomainEntry entry = null;
 				for(String entryString: model.getEntries()){
 					entry = DomainFactory.eINSTANCE.createDomainEntry();
 					entry.setDescription(entryString);
 					entry.setValue(entryString);
-					
+					System.out.println(entry);
 					domain.getEntries().add(entry);
 				}
 				

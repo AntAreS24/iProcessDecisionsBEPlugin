@@ -210,7 +210,7 @@ public class ParseVocabulary {
 
 	public static void main(String[] args) {
 		ParseVocabulary instance = new ParseVocabulary();
-		String filename = "D:\\Work\\TIBCO\\Projects\\ANZ\\OneCare_Express_Prototype.cvj";
+		String filename = "D:\\temp\\sample.cvj";
 		List<Vocabulary> list = instance.getListOfVocabularyObjects(filename, true);
 		for (Vocabulary vocabulary : list) {
 			instance.createConcept("D:\\workspace\\be\\Test",vocabulary);
