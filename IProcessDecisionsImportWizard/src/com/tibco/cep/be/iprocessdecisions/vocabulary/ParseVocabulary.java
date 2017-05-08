@@ -58,11 +58,22 @@ public class ParseVocabulary {
 
 	public Concept createConcept(String parentFolder, Vocabulary vocabulary){
 		Concept con = ElementFactory.eINSTANCE.createConcept();
-        con.setFolder("/Concepts");
+        con.setFolder("/Concepts/");
+        con.setNamespace("/Concepts/");
+        con.setDescription("");
+        String[] path;
+        if(parentFolder.startsWith("/")){
+        	path = parentFolder.split("/");
+        }else{
+        	path = parentFolder.split("\\\\");
+        }
+		con.setOwnerProjectName(path[path.length-1]);
+		con.setSuperConceptPath("");
+		con.setAutoStartStateMachine(true);
         con.setName(vocabulary.getName());
         con.setGUID(vocabulary.getGUID());
         con.getProperties().addAll(vocabulary.getAttributesAsPropertyDefinition(parentFolder));
-        con.getProperties().addAll(vocabulary.getAssociationsAsPropertyDefinition());
+        con.getProperties().addAll(vocabulary.getAssociationsAsPropertyDefinition(parentFolder));
         
         XMIResourceImpl res = new XMIResourceImpl(URI.createFileURI(parentFolder+"/Concepts/"+vocabulary.getName()+".concept"));
         ((XMLResource) res).setEncoding("UTF-8");
@@ -109,7 +120,7 @@ public class ParseVocabulary {
 								Attribute name = startElement.getAttributeByName(QName.valueOf("Name"));
 								//TODO check if the name is not in the restricted list
 								voc = new Vocabulary(name.getValue());
-								System.out.println("Object : " + voc);
+								//System.out.println("Object : " + voc);
 								objectList.put(voc.getName(), voc);
 							}
 							if(qName.equalsIgnoreCase("Attribute")){
@@ -126,7 +137,7 @@ public class ParseVocabulary {
 									att = new com.tibco.cep.be.iprocessdecisions.vocabulary.pojo.Attribute(nameValue, type.getValue());
 									voc.addAttribute(att);
 									
-									System.out.println("\t [a]:"+name+ " | "+type);
+									//System.out.println("\t [a]:"+name+ " | "+type);
 									
 									Attribute attrEnum = startElement.getAttributeByName(QName.valueOf("EnumerationValueSet"));
 									if(attrEnum != null){
@@ -164,7 +175,7 @@ public class ParseVocabulary {
 								}
 								
 								if(associationEndIndex > 0 && !voc.getName().equalsIgnoreCase(type.getValue())){
-									System.out.println("\t [ref]:"+assoc.getName() + " | "+type.getValue());
+									//System.out.println("\t [ref]:"+assoc.getName() + " | "+type.getValue());
 									Attribute multiplicity = startElement.getAttributeByName(QName.valueOf("Multiplicity"));
 									assoc.setTargetType(type.getValue());
 									assoc.setMultiplicity(multiplicity.getValue());

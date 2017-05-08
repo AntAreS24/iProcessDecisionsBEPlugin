@@ -12,9 +12,9 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
 import com.tibco.cep.designtime.core.model.PROPERTY_TYPES;
 import com.tibco.cep.designtime.core.model.domain.Domain;
-import com.tibco.cep.designtime.core.model.domain.DomainEntry;
 import com.tibco.cep.designtime.core.model.domain.DomainFactory;
 import com.tibco.cep.designtime.core.model.domain.DomainInstance;
+import com.tibco.cep.designtime.core.model.domain.Single;
 import com.tibco.cep.designtime.core.model.element.ElementFactory;
 import com.tibco.cep.designtime.core.model.element.PropertyDefinition;
 
@@ -95,6 +95,14 @@ public class Vocabulary implements Comparable<Vocabulary>{
 		for (Attribute attribute : attributes) {
 			prop = ElementFactory.eINSTANCE.createPropertyDefinition();
 			prop.setName(attribute.getName());
+			prop.setOwnerPath("/Concepts/"+getName());
+			String[] path;
+	        if(parentFolder.startsWith("/")){
+	        	path = parentFolder.split("/");
+	        }else{
+	        	path = parentFolder.split("\\\\");
+	        }
+	        prop.setOwnerProjectName(path[path.length-1]);
 			
 			if(attribute.getType().equalsIgnoreCase("String")){
 				prop.setType(PROPERTY_TYPES.STRING);
@@ -114,7 +122,7 @@ public class Vocabulary implements Comparable<Vocabulary>{
 			
 			//TODO set a domain model if the attribute as one defined
 			DomainModel model = attribute.getDomainModel();
-			if(model != null){
+			if(model != null && prop.getType() == PROPERTY_TYPES.STRING){
 				String modelName = attribute.getName()+"_model";
 				//Create the domain model file
 				Domain domain = DomainFactory.eINSTANCE.createDomain();
@@ -122,13 +130,13 @@ public class Vocabulary implements Comparable<Vocabulary>{
 				domain.setGUID(UUID.randomUUID().toString().toUpperCase());
 				domain.setNamespace("/Concepts/");
 				domain.setFolder("/Concepts/");
-				DomainEntry entry = null;
+				domain.setDescription("");
+				domain.setOwnerProjectName(path[path.length-1]);
 				for(String entryString: model.getEntries()){
-					entry = DomainFactory.eINSTANCE.createDomainEntry();
-					entry.setDescription(entryString);
-					entry.setValue(entryString);
-					System.out.println(entry);
-					domain.getEntries().add(entry);
+					Single single = DomainFactory.eINSTANCE.createSingle();
+					single.setValue(entryString);
+					single.setDescription(entryString);
+					domain.getEntries().add(single);
 				}
 				
 				XMIResourceImpl res = new XMIResourceImpl(URI.createFileURI(parentFolder+"/Concepts/"+modelName+".domain"));
@@ -143,7 +151,7 @@ public class Vocabulary implements Comparable<Vocabulary>{
 				// Create the domain model instance
 				DomainInstance domainInst = DomainFactory.eINSTANCE.createDomainInstance();
 				domainInst.setOwnerProperty(prop);
-				domainInst.setResourcePath("/Concept/"+modelName);
+				domainInst.setResourcePath("/Concepts/"+modelName);
 				// Set the model to match on this attribute
 				prop.getDomainInstances().add(domainInst);
 			}
@@ -154,15 +162,24 @@ public class Vocabulary implements Comparable<Vocabulary>{
 		return out;
 	}
 	
-	public List<PropertyDefinition> getAssociationsAsPropertyDefinition(){
+	public List<PropertyDefinition> getAssociationsAsPropertyDefinition(String parentFolder){
 		PropertyDefinition prop = null;
 		List<PropertyDefinition> out = new ArrayList<>();
 		
 		for (Association association : associations) {
 			prop = ElementFactory.eINSTANCE.createPropertyDefinition();
 			prop.setName(association.getName());
+			prop.setOwnerPath("/Concepts/"+getName());
+			String[] path;
+	        if(parentFolder.startsWith("/")){
+	        	path = parentFolder.split("/");
+	        }else{
+	        	path = parentFolder.split("\\\\");
+	        }
+	        prop.setOwnerProjectName(path[path.length-1]);
+
 			prop.setType(PROPERTY_TYPES.CONCEPT_REFERENCE);
-			prop.setConceptTypePath("/Concept/"+association.getTargetType());
+			prop.setConceptTypePath("/Concepts/"+association.getTargetType());
 			if(association.getMultiplicity() != null && association.getMultiplicity().equalsIgnoreCase("*")){
 				prop.setArray(true);
 			}

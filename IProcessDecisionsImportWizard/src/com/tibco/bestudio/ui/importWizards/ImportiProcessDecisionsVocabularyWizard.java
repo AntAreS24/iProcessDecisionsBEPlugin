@@ -41,7 +41,6 @@ public class ImportiProcessDecisionsVocabularyWizard extends Wizard implements I
 		for (Vocabulary vocabulary : list) {
 			processor.createConcept(containerRoot.makeAbsolute().toString(), vocabulary);
 		}
-		//FIXME do something with the list...
         return true;
 	}
 	 
