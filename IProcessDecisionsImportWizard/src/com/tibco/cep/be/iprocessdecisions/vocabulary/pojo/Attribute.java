@@ -3,6 +3,7 @@ package com.tibco.cep.be.iprocessdecisions.vocabulary.pojo;
 public class Attribute {
 	private String name;
 	private String type;
+	private DomainModel model;
 	
 	public Attribute(String name, String type) {
 		this.name  = name;
@@ -26,5 +27,13 @@ public class Attribute {
 	@Override
 	public String toString() {
 		return "["+name+"|"+type+"]";
+	}
+
+	public void setDomainModel(DomainModel model) {
+		this.model = model;
+	}
+	
+	public DomainModel getDomainModel(){
+		return model;
 	}
 }

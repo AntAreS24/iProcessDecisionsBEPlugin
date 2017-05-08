@@ -8,10 +8,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.ide,
  org.eclipse.core.resources,
- com.tibco.cep.bpmn.common;bundle-version="5.4.0",
- com.tibco.cep.bpmn.core;bundle-version="5.4.0",
- com.tibco.cep.bpmn.rt;bundle-version="5.4.0",
- com.tibco.cep.bpmn.ui;bundle-version="5.4.0",
  com.tibco.cep.datamodeling;bundle-version="5.4.0",
  com.tibco.cep.datamodeling.common;bundle-version="5.4.0",
  com.tibco.cep.decision.table.capabilities;bundle-version="5.4.0",
@@ -72,6 +68,7 @@ Require-Bundle: org.eclipse.ui,
  com.tibco.xml.mappermodel.emfapi;bundle-version="1.0.700",
  com.tibco.xml.mapperui;bundle-version="1.0.700",
  com.tibco.xml.mapperui.emfapi;bundle-version="1.0.700",
- com.tibco.xml.xmodel;bundle-version="1.0.900"
+ com.tibco.xml.xmodel;bundle-version="1.0.900",
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

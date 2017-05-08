@@ -12,10 +12,14 @@ package com.tibco.bestudio.ui.importWizards;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
+
+import com.tibco.cep.be.iprocessdecisions.vocabulary.ParseVocabulary;
+import com.tibco.cep.be.iprocessdecisions.vocabulary.pojo.Vocabulary;
 
 public class ImportiProcessDecisionsVocabularyWizard extends Wizard implements IImportWizard {
 	
@@ -29,7 +33,15 @@ public class ImportiProcessDecisionsVocabularyWizard extends Wizard implements I
 	 * @see org.eclipse.jface.wizard.Wizard#performFinish()
 	 */
 	public boolean performFinish() {
-		ArrayList<String> list = mainPage.getList();
+		ArrayList<Vocabulary> list = mainPage.getList();
+		ParseVocabulary processor = new ParseVocabulary();
+		
+		IPath containerRoot = mainPage.getContainerFullPath();
+		
+		for (Vocabulary vocabulary : list) {
+			processor.createConcept(containerRoot.makeAbsolute().toString(), vocabulary);
+		}
+		//FIXME do something with the list...
         return true;
 	}
 	 

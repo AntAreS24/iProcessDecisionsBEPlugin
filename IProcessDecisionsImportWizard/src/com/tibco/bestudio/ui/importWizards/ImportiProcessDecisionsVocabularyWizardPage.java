@@ -2,6 +2,7 @@ package com.tibco.bestudio.ui.importWizards;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
@@ -34,13 +35,14 @@ import org.eclipse.ui.dialogs.WizardDataTransferPage;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 
 import com.tibco.cep.be.iprocessdecisions.vocabulary.ParseVocabulary;
+import com.tibco.cep.be.iprocessdecisions.vocabulary.pojo.Vocabulary;
 
 @SuppressWarnings("restriction")
 public class ImportiProcessDecisionsVocabularyWizardPage extends WizardDataTransferPage {
 	protected ParseVocabulary processor;
 	protected FileFieldEditor editor;
 	protected Table tableVocabularyObjects;
-	protected ArrayList<String> selectedVocabularyObjectList;
+	protected HashMap<String, Vocabulary> selectedVocabularyObjectList;
 	protected IResource currentResourceSelection;
 
 	private Button containerBrowseButton;
@@ -58,7 +60,7 @@ public class ImportiProcessDecisionsVocabularyWizardPage extends WizardDataTrans
 		super(pageName);
 		setTitle(pageName); // NON-NLS-1
 		setDescription("Import a file from the local file system into the workspace"); // NON-NLS-1
-		selectedVocabularyObjectList = new ArrayList<String>();
+		selectedVocabularyObjectList = new HashMap<String, Vocabulary>();
 		//Initialize to null
         currentResourceSelection = null;
         if (selection.size() == 1) {
@@ -106,11 +108,11 @@ public class ImportiProcessDecisionsVocabularyWizardPage extends WizardDataTrans
 
 				System.out.println(item.getText() + " " + item.getChecked());
 				if (item.getChecked()) {
-					if (!selectedVocabularyObjectList.contains(item.getText())) {
-						selectedVocabularyObjectList.add(item.getText());
+					if (!selectedVocabularyObjectList.containsKey(item.getText())) {
+						selectedVocabularyObjectList.put(item.getText(), new Vocabulary(item.getText()));
 					}
 				} else {
-					if (selectedVocabularyObjectList.contains(item.getText())) {
+					if (selectedVocabularyObjectList.containsKey(item.getText())) {
 						selectedVocabularyObjectList.remove(item.getText());
 					}
 
@@ -155,17 +157,19 @@ public class ImportiProcessDecisionsVocabularyWizardPage extends WizardDataTrans
 
 				System.out.println("Starting to parse file");
 				processor = new ParseVocabulary();
-				ArrayList<String> list = processor.getListOfVocabularyObjects(pathString);
+				ArrayList<Vocabulary> list = processor.getListOfVocabularyObjects(pathString, true);
 
 				Collections.sort(list);
 
-				for (String vocabularyObject : list) {
+				for (Vocabulary vocabularyObject : list) {
 					TableItem item = new TableItem(tableVocabularyObjects, SWT.NONE);
-					item.setText(vocabularyObject);
+					item.setText(vocabularyObject.getName());
 					item.setChecked(true);
 				}
 
-				selectedVocabularyObjectList.addAll(list);
+				for (Vocabulary vocabulary : list) {
+					selectedVocabularyObjectList.put(vocabulary.getName(), vocabulary);
+				}
 
 				checkIfPageComplete();
 			}
@@ -194,12 +198,8 @@ public class ImportiProcessDecisionsVocabularyWizardPage extends WizardDataTrans
 		setPageComplete(result);
 	}
 
-	public ArrayList<String> getList() {
-		ArrayList<String> out = selectedVocabularyObjectList;
-		if(out == null){
-			out = new ArrayList<>(); 
-		}
-		return out;
+	public ArrayList<Vocabulary> getList() {
+		return new ArrayList<>(selectedVocabularyObjectList.values());
 	}
 
 	/**
