@@ -44,7 +44,8 @@ public class ParseRule {
 			while (entries.hasMoreElements()) {
 				ZipEntry entry = entries.nextElement();
 				// System.out.println("Name: " + entry.getName());
-				if (entry.getName() != null && entry.getName().equalsIgnoreCase("VOCAB_BASE.cvo")) {
+				if (entry.getName() != null && entry.getName().equalsIgnoreCase("RULESET_BASE.cc")) {
+					// This file will list the table and their order of execution.
 					InputStream stream = zipFile.getInputStream(entry);
 					XMLInputFactory xmlFactory = XMLInputFactory.newInstance();
 					XMLEventReader eventReader = xmlFactory.createXMLEventReader(stream);

@@ -123,7 +123,7 @@ public class ParseVocabulary {
 								//System.out.println("Object : " + voc);
 								objectList.put(voc.getName(), voc);
 							}
-							if(qName.equalsIgnoreCase("Attribute")){
+							if(qName.equalsIgnoreCase("Attribute") || qName.equalsIgnoreCase("DerivedAttribute")){
 								if(voc != null){
 									Attribute name = startElement.getAttributeByName(QName.valueOf("Name"));
 									String nameValue = null;

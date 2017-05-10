@@ -94,7 +94,11 @@ public class Vocabulary implements Comparable<Vocabulary>{
 		
 		for (Attribute attribute : attributes) {
 			prop = ElementFactory.eINSTANCE.createPropertyDefinition();
-			prop.setName(attribute.getName());
+			String attributeName = attribute.getName();
+			if(attributeName.startsWith(name)){
+				attributeName.substring(name.length()+1, attributeName.length());
+			}
+			prop.setName(attributeName);
 			prop.setOwnerPath("/Concepts/"+getName());
 			String[] path;
 	        if(parentFolder.startsWith("/")){
@@ -168,7 +172,12 @@ public class Vocabulary implements Comparable<Vocabulary>{
 		
 		for (Association association : associations) {
 			prop = ElementFactory.eINSTANCE.createPropertyDefinition();
-			prop.setName(association.getName());
+			String associationName = association.getName();
+			if(associationName.startsWith(name)){
+				associationName = associationName.substring(name.length()+1, associationName.length());
+			}
+			associationName = associationName.substring(0, 1).toLowerCase() + associationName.substring(1);
+			prop.setName(associationName);
 			prop.setOwnerPath("/Concepts/"+getName());
 			String[] path;
 	        if(parentFolder.startsWith("/")){
